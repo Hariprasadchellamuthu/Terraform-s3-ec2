@@ -16,13 +16,14 @@ pipeline {
                  script{
                         dir("terraform")
                         {
-                if (params.awsService == 'EC2') {
-                    git "https://github.com/Hariprasadchellamuthu/Terraform1.git"
-                } else if (params.awsService == 'S3') {
-                    git "https://github.com/Hariprasadchellamuthu/Terraform2.git"
-                } else {
-                    error("Invalid AWS service selection")
-                }                        }
+                            if (params.awsService == 'EC2') {
+                                git "https://github.com/Hariprasadchellamuthu/Terraform1.git"
+                            } else if (params.awsService == 'S3') {
+                                git "https://github.com/Hariprasadchellamuthu/Terraform2.git"
+                            } else {
+                                error("Invalid AWS service selection")
+                            }                        
+                        }
                     }
                 }
             }
