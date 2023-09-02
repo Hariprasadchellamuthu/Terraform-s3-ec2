@@ -14,15 +14,19 @@ pipeline {
         stage('checkout') {
             steps {
                  script{
-                        dir("terraform")
-                        {
-                            if (params.awsService == 'EC2') {
-                                git "https://github.com/Hariprasadchellamuthu/Terraform1.git"
-                            } else if (params.awsService == 'S3') {
-                                git "https://github.com/Hariprasadchellamuthu/Terraform2.git"
-                            } else {
+                     def repoUrl = ''
+                     def subDirectory = ''
+                    if (params.awsService == 'EC2') {
+                        repoUrl = "https://github.com/Hariprasadchellamuthu/Terraform1.git"
+                        subDirectory = 'ec2'
+                    } else if (params.awsService == 'S3') {
+                               repoUrl =  "https://github.com/Hariprasadchellamuthu/Terraform2.git"
+                               subDirectory = 's3' 
+                    } else {
                                 error("Invalid AWS service selection")
-                            }                        
+                            }
+                    checkout([$class: 'GitSCM', branches: [[name: '*/main']], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[credentialsId: 'YOUR_CREDENTIALS_ID', url: repoUrl]]])
+                     dir(subDirectory) {
                         }
                     }
                 }
@@ -30,9 +34,9 @@ pipeline {
 
         stage('Plan') {
             steps {
-                sh "cd terraform/${params.awsService.toLowerCase()}; terraform init"
-                sh "cd terraform/${params.awsService.toLowerCase()}; terraform plan -out tfplan"
-                sh "cd terraform/${params.awsService.toLowerCase()}; terraform show -no-color tfplan > tfplan.txt"
+                sh "terraform init"
+                sh "terraform plan -out tfplan"
+                sh "terraform show -no-color tfplan > tfplan.txt"
             }
         }
         stage('Approval') {
@@ -53,7 +57,7 @@ pipeline {
 
         stage('Apply') {
             steps {
-                sh "cd Terraform-s3-ec2/${params.awsService.toLowerCase()}; terraform apply -input=false tfplan"
+                sh "terraform apply -input=false tfplan"
             }
         }
     }
