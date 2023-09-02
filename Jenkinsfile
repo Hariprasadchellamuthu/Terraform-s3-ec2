@@ -2,6 +2,7 @@ pipeline {
 
     parameters {
         booleanParam(name: 'autoApprove', defaultValue: false, description: 'Automatically run apply after generating plan?')
+        choice(name: 'awsService', choices: ['EC2', 'S3'], description: 'Select AWS Service to Create')
     } 
     environment {
         AWS_ACCESS_KEY_ID     = credentials('AWS_ACCESS_KEY_ID')
