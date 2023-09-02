@@ -14,7 +14,7 @@ pipeline {
         stage('checkout') {
             steps {
                  script{
-                        dir("terraform")
+                    dir("terraform")
                         {
                             if (params.awsService == 'EC2') {
                                 git "https://github.com/Hariprasadchellamuthu/Terraform1.git"
