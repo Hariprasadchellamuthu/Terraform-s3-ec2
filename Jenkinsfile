@@ -18,8 +18,14 @@ pipeline {
                         {
                             if (params.awsService == 'EC2') {
                                 git "https://github.com/Hariprasadchellamuthu/Terraform1.git"
+                                dir("ec2") {
+
+                                }
                             } else if (params.awsService == 'S3') {
                                 git "https://github.com/Hariprasadchellamuthu/Terraform2.git"
+                                dir("s3") {
+
+                                }
                             } else {
                                 error("Invalid AWS service selection")
                             }                        
