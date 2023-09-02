@@ -14,7 +14,7 @@ pipeline {
         stage('checkout') {
             steps {
                  script{
-                    dir("terraform")
+                    dir("Terraform-s3-ec2")
                         {
                             if (params.awsService == 'EC2') {
                                 git "https://github.com/Hariprasadchellamuthu/Terraform1.git"
@@ -30,9 +30,9 @@ pipeline {
 
         stage('Plan') {
             steps {
-                sh "cd terraform/${params.awsService.toLowerCase()}; terraform init"
-                sh "cd terraform/${params.awsService.toLowerCase()}; terraform plan -out tfplan"
-                sh "cd terraform/${params.awsService.toLowerCase()}; terraform show -no-color tfplan > tfplan.txt"
+                sh "cd Terraform-s3-ec2/${params.awsService.toLowerCase()}; terraform init"
+                sh "cd Terraform-s3-ec2/${params.awsService.toLowerCase()}; terraform plan -out tfplan"
+                sh "cd Terraform-s3-ec2/${params.awsService.toLowerCase()}; terraform show -no-color tfplan > tfplan.txt"
             }
         }
         stage('Approval') {
@@ -53,7 +53,7 @@ pipeline {
 
         stage('Apply') {
             steps {
-                sh "cd terraform/${params.awsService.toLowerCase()}; terraform apply -input=false tfplan"
+                sh "cd Terraform-s3-ec2/${params.awsService.toLowerCase()}; terraform apply -input=false tfplan"
             }
         }
     }
