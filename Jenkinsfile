@@ -14,18 +14,12 @@ pipeline {
         stage('checkout') {
             steps {
                  script{
-                    dir("Terraform-s3-ec2")
+                        dir("terraform")
                         {
                             if (params.awsService == 'EC2') {
                                 git "https://github.com/Hariprasadchellamuthu/Terraform1.git"
-                                dir("ec2") {
-
-                                }
                             } else if (params.awsService == 'S3') {
                                 git "https://github.com/Hariprasadchellamuthu/Terraform2.git"
-                                dir("s3") {
-
-                                }
                             } else {
                                 error("Invalid AWS service selection")
                             }                        
@@ -36,9 +30,9 @@ pipeline {
 
         stage('Plan') {
             steps {
-                sh "cd Terraform-s3-ec2/${params.awsService.toLowerCase()}; terraform init"
-                sh "cd Terraform-s3-ec2/${params.awsService.toLowerCase()}; terraform plan -out tfplan"
-                sh "cd Terraform-s3-ec2/${params.awsService.toLowerCase()}; terraform show -no-color tfplan > tfplan.txt"
+                sh "cd terraform/${params.awsService.toLowerCase()}; terraform init"
+                sh "cd terraform/${params.awsService.toLowerCase()}; terraform plan -out tfplan"
+                sh "cd terraform/${params.awsService.toLowerCase()}; terraform show -no-color tfplan > tfplan.txt"
             }
         }
         stage('Approval') {
