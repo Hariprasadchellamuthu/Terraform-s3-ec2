@@ -68,8 +68,9 @@ pipeline {
                      } else {
                          error("Invalid action selected: ${terraformAction}")
                       }
-            }
-        }
+                  }
+             }
+         }
     }
 
   }
