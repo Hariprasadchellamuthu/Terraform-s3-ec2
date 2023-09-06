@@ -57,7 +57,17 @@ pipeline {
 
         stage('Apply') {
             steps {
-                sh "terraform apply -input=false tfplan"
+                script {
+                    def terraformAction = params.action
+                    echo "terraform action is --> ${terraformAction}"
+
+                     if (terraformAction == 'apply') {
+                         sh "terraform apply -input=false tfplan"
+                     } else if (terraformAction == 'destroy') {
+                         sh "terraform destroy -input=false"
+                     } else {
+                         error("Invalid action selected: ${terraformAction}")
+                      }
             }
         }
     }
