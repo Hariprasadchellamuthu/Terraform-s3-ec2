@@ -64,7 +64,7 @@ pipeline {
                      if (terraformAction == 'apply') {
                          sh "terraform apply -input=false tfplan"
                      } else if (terraformAction == 'destroy') {
-                         sh "terraform destroy -input=false"
+                         sh "terraform destroy -input=false tfplan"
                      } else {
                          error("Invalid action selected: ${terraformAction}")
                       }
